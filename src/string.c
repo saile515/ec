@@ -52,3 +52,19 @@ ec_string ec_string_trim(ec_string string)
 
     return result;
 }
+
+ec_string ec_string_concat(ec_string a, ec_string b)
+{
+    size_t a_length = strlen(a);
+    size_t b_length = strlen(b);
+
+    char *string = malloc(sizeof(char) * (a_length + b_length) + 1);
+
+    memcpy(string, a, a_length);
+    memcpy(string + a_length, b, b_length);
+    string[a_length + b_length] = 0;
+
+    return string;
+}
+
+void ec_string_free(ec_string string) { free((char *)string); }
