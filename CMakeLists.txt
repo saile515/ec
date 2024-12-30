@@ -6,6 +6,7 @@ set(SOURCES
     src/filesystem.c
     src/string.c
     src/vector.c
+    src/math/matrix4.c
 )
 
 set(HEADERS
@@ -14,5 +15,5 @@ set(HEADERS
     include/ec/vector.h
 )
 
-add_library(ec STATIC ${SOURCES} ${HEADERS})
+add_library(ec SHARED ${SOURCES} ${HEADERS})
 target_include_directories(ec PUBLIC include)
