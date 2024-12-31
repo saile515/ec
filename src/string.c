@@ -1,5 +1,7 @@
 #include "ec/string.h"
 
+#include <stdarg.h>
+#include <stdio.h>
 #include <string.h>
 
 ec_vector ec_string_split(ec_string string, char divider)
@@ -65,6 +67,30 @@ ec_string ec_string_concat(ec_string a, ec_string b)
     string[a_length + b_length] = 0;
 
     return string;
+}
+
+ec_string ec_string_format(ec_string format, ...)
+{
+    va_list args;
+    va_start(args, format);
+
+    va_list args_copy_1;
+    va_copy(args_copy_1, args);
+
+    va_list args_copy_2;
+    va_copy(args_copy_2, args);
+
+    int size = vsnprintf(NULL, 0, format, args_copy_1) + 1;
+
+    char *result = malloc(size * sizeof(char));
+
+    vsnprintf(result, size, format, args_copy_2);
+
+    va_end(args);
+    va_end(args_copy_1);
+    va_end(args_copy_2);
+
+    return result;
 }
 
 void ec_string_free(ec_string string) { free((char *)string); }

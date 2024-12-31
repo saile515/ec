@@ -10,6 +10,13 @@ ec_matrix4f ec_matrix4f_create_identity_matrix()
     return result;
 }
 
+ec_matrix4f ec_matrix4f_zero()
+{
+    ec_matrix4f result = {0};
+
+    return result;
+}
+
 ec_matrix4f ec_matrix4f_create_perspective_projection_matrix(float fov,
                                                              float aspect_ratio,
                                                              float near,
@@ -29,10 +36,29 @@ ec_matrix4f ec_matrix4f_create_perspective_projection_matrix(float fov,
     return result;
 }
 
+ec_matrix4f ec_matrix4f_create_orthographic_projection_matrix(
+    float frustum_height, float aspect_ratio, float near, float far)
+{
+    float frustum_width = frustum_height * aspect_ratio;
+
+    ec_matrix4f result = ec_matrix4f_zero();
+
+    result.xx = 2 / frustum_width;
+    result.yy = 2 / frustum_height;
+    result.zz = -2 / far - near;
+    result.ww = 1;
+
+    result.wx = -1 / frustum_width;
+    result.wy = -1 / frustum_height;
+    result.wz = -(far + near) / (far - near);
+
+    return result;
+}
+
 ec_matrix4f ec_matrix4f_scale(const ec_matrix4f *matrix,
                               const ec_vector3f *scale)
 {
-    ec_matrix4f scaling_matrix;
+    ec_matrix4f scaling_matrix = ec_matrix4f_zero();
 
     scaling_matrix.xx = scale->x;
     scaling_matrix.yy = scale->y;
@@ -175,4 +201,16 @@ ec_matrix4f ec_matrix4f_inverse(const ec_matrix4f *m)
     }
 
     return result;
+}
+
+ec_string ec_matrix4f_to_string(const ec_matrix4f *matrix)
+{
+    return ec_string_format("| %f %f %f %f |\n"
+                            "| %f %f %f %f |\n"
+                            "| %f %f %f %f |\n"
+                            "| %f %f %f %f |\n",
+                            matrix->xx, matrix->yx, matrix->zx, matrix->wx,
+                            matrix->xy, matrix->yy, matrix->zy, matrix->wy,
+                            matrix->xz, matrix->yz, matrix->zz, matrix->wz,
+                            matrix->xw, matrix->yw, matrix->zw, matrix->ww);
 }

@@ -10,4 +10,6 @@ ec_string ec_string_trim(ec_string string);
 
 ec_string ec_string_concat(ec_string a, ec_string b);
 
+ec_string ec_string_format(ec_string format, ...);
+
 void ec_string_free(ec_string string);
